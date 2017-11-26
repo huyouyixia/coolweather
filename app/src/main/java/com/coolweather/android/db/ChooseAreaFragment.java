@@ -1,5 +1,6 @@
 package com.coolweather.android.db;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.coolweather.android.R;
+import com.coolweather.android.WeatherActivity;
 import com.coolweather.android.util.HttpUtil;
 import com.coolweather.android.util.Utility;
 
@@ -54,6 +56,7 @@ public class ChooseAreaFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        Log.d(TAG, "onCreateView: 启动");
         View view = inflater.inflate(R.layout.choose_area,container,false);
         progressDialog = new AlertDialog.Builder(this.getActivity());
         progressDialog.setTitle("正在查询");
@@ -76,6 +79,7 @@ public class ChooseAreaFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        Log.d(TAG, "onActivityCreated: 启动");
         listView.setOnItemClickListener((adapterView, view, i, l) -> {
             b = true;
             Log.d(TAG, "onActivityCreated: "+currentLevel);
@@ -86,6 +90,13 @@ public class ChooseAreaFragment extends Fragment {
             }else if(currentLevel == LEVEL_CITY){
                 selectedCity = cityList.get(i);
                 queryCounties();
+            }else if(currentLevel == LENVL_COUNTY){
+                String weatherId = countyList.get(i).getWeatherId();
+                Intent intent = new Intent(getActivity(), WeatherActivity.class);
+                Log.d(TAG, "onActivityCreated: weatherId=" + weatherId);
+                intent.putExtra("weather_id",weatherId);
+                startActivity(intent);
+                getActivity().finish();
             }
         });
         backButton.setOnClickListener(view ->{
