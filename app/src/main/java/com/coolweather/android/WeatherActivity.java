@@ -7,7 +7,6 @@ import android.preference.PreferenceManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,7 +30,7 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-public class WeatherActivity extends AppCompatActivity {
+public class WeatherActivity extends BaseActivity {
 
     public SwipeRefreshLayout swipeRefreshLayout;
     private String mWeatherId;
@@ -50,6 +49,12 @@ public class WeatherActivity extends AppCompatActivity {
     public DrawerLayout drawerLayout;
     private Button navButton;
     private static final String TAG = "WeatherActivity";
+
+    @Override
+    public void onBackPressed() {
+        ActivityCollector.finishAll();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,6 +109,7 @@ public class WeatherActivity extends AppCompatActivity {
         }
         swipeRefreshLayout.setOnRefreshListener(()->{
             requestWeather(mWeatherId);
+            Log.d(TAG, "onCreate: 进入刷新");
         });
     }
     public void requestWeather(final String weatherId){
