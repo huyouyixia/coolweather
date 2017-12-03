@@ -57,7 +57,7 @@ public class WeatherActivity extends AppCompatActivity {
 //        if(Build.VERSION.SDK_INT >= 21){
 //            View decorView = getWindow().getDecorView();
 //            decorView.setSystemUiVisibility(
-//                  View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+//                  View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
 //            );
 //            getWindow().setStatusBarColor(Color.TRANSPARENT);
 //        }
@@ -122,9 +122,10 @@ public class WeatherActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final String responseText = response.body().string();
+                Log.d(TAG, "responseText="+responseText);
                 final Weather weather = Utility.handleWeatherResponse(responseText);
                 runOnUiThread(()->{
-                    if(weather != null & "ok".equals(weather.status)){
+                    if(weather != null && "ok".equals(weather.status)){
                         SharedPreferences.Editor editor = PreferenceManager
                                 .getDefaultSharedPreferences(WeatherActivity.this).edit();
                         Log.d(TAG, "onResponse: 请求成功");
@@ -133,7 +134,7 @@ public class WeatherActivity extends AppCompatActivity {
                         editor.apply();
                         mWeatherId = weather.basic.weatherId;
                         showWeatherInfo(weather);
-                    }else{
+                    }else {
                         Toast.makeText(WeatherActivity.this,"获取天气信息失败",Toast.LENGTH_SHORT).show();
                     }
                     swipeRefreshLayout.setRefreshing(false);

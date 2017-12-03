@@ -18,12 +18,13 @@ import org.json.JSONObject;
  */
 
 public class Utility {
-    private static final String TAG = "Utility" ;
-    public static boolean handleProvinceResponse(String response){
-        if(!TextUtils.isEmpty(response)){
+    private static final String TAG = "Utility";
+
+    public static boolean handleProvinceResponse(String response) {
+        if (!TextUtils.isEmpty(response)) {
             try {
                 JSONArray allProvinces = new JSONArray(response);
-                for(int i = 0; i<allProvinces.length(); i++){
+                for (int i = 0; i < allProvinces.length(); i++) {
                     JSONObject provinceObject = allProvinces.getJSONObject(i);
                     Province province = new Province();
                     province.setProvinceName(provinceObject.getString("name"));
@@ -31,17 +32,18 @@ public class Utility {
                     province.save();
                 }
                 return true;
-            }catch (JSONException js){
+            } catch (JSONException js) {
                 js.printStackTrace();
             }
         }
         return false;
     }
-    public static boolean handleCityResponse(String response,int provinceId){
-        if(!TextUtils.isEmpty(response)){
+
+    public static boolean handleCityResponse(String response, int provinceId) {
+        if (!TextUtils.isEmpty(response)) {
             try {
                 JSONArray allCity = new JSONArray(response);
-                for(int i=0; i<allCity.length(); i++){
+                for (int i = 0; i < allCity.length(); i++) {
                     JSONObject cityObject = allCity.getJSONObject(i);
                     City city = new City();
                     city.setCityName(cityObject.getString("name"));
@@ -50,14 +52,15 @@ public class Utility {
                     city.save();
                 }
                 return true;
-            }catch (JSONException e){
+            } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
         return false;
     }
-    public static boolean handleCounty(String response,int cityId){
-        if(!TextUtils.isEmpty(response)){
+
+    public static boolean handleCounty(String response, int cityId) {
+        if (!TextUtils.isEmpty(response)) {
             try {
                 JSONArray allCounties = new JSONArray(response);
                 for (int i = 0; i < allCounties.length(); i++) {
@@ -69,24 +72,25 @@ public class Utility {
                     county.save();
                 }
                 return true;
-            }catch (JSONException e){
+            } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
         return false;
     }
-    public static Weather handleWeatherResponse(String response){
-        try{
+
+    public static Weather handleWeatherResponse(String response) {
+        try {
             JSONObject jsonObject = new JSONObject(response);
             JSONArray jsonArray = jsonObject.getJSONArray("HeWeather");
             String weatherContent = jsonArray.getJSONObject(0).toString();
-            Weather weather = new Gson().fromJson(weatherContent,Weather.class);
-            Log.d(TAG, "handleWeatherResponse: aqi.aqi="+weather.aqi.city.aqi);
+            Weather weather = new Gson().fromJson(weatherContent, Weather.class);
+            Log.d(TAG, "handleWeatherResponse: aqi.aqi=" + weather.aqi.city.aqi);
             return weather;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
+            Log.d(TAG, "handleWeatherResponse: weather返回空");
+            return null;
         }
-        Log.d(TAG, "handleWeatherResponse: weather返回空");
-        return null;
     }
 }
